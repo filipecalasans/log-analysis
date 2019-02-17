@@ -50,7 +50,7 @@ author, '/article/' || slug as path from articles;
 Execute the following commnad in the directory where you extracted the files:
 
 ```console
-vagrant@vagrant:/vagrant/logreport$ chamod +x log_analysis.py
+vagrant@vagrant:/vagrant/logreport$ chmod +x log_analysis.py
 vagrant@vagrant:/vagrant/logreport$ ./log_analysis.py
 ```
 

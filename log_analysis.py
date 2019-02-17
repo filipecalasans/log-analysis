@@ -21,6 +21,12 @@ def cursorFactory():
     return db.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
 
+def execute_query(query):
+    cursor = cursorFactory()
+    cursor.execute(query)
+    return cursor.fetchall()
+
+
 def most_popular_articles_all_time():
     """
 
@@ -45,10 +51,7 @@ def most_popular_articles_all_time():
         "ORDER BY views DESC;".format(popular=popular_query)
     )
 
-    cursor = cursorFactory()
-    cursor.execute(query)
-    result = cursor.fetchall()
-    return result
+    return execute_query(query)
 
 
 def most_popular_author_of_all_time():
@@ -76,10 +79,7 @@ def most_popular_author_of_all_time():
         "ORDER BY views DESC;".format(subquery=subq)
     )
 
-    cursor = cursorFactory()
-    cursor.execute(query)
-    result = cursor.fetchall()
-    return result
+    return execute_query(query)
 
 
 def days_with_more_than_1_pct_errors():
@@ -128,10 +128,7 @@ def days_with_more_than_1_pct_errors():
                                             total_errors=total_errors)
     )
 
-    cursor = cursorFactory()
-    cursor.execute(query)
-    result = cursor.fetchall()
-    return result
+    return execute_query(query)
 
 
 def view_popular_articles(data):
