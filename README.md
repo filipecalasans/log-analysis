@@ -12,6 +12,7 @@ regarding the data stored in PostgreSQL.
 * [Vagrant](https://www.vagrantup.com/downloads.html)
 * [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
 * [Vagrant file as provided by Udacity](https://github.com/udacity/fullstack-nanodegree-vm/blob/master/vagrant/Vagrantfile)
+* [Database as provided by Udacity](https://d17h27t6h515a5.cloudfront.net/topher/2016/August/57b5f748_newsdata/newsdata.zip)
 * Python 3
 * PostgreSQL
 * Data Base news as provided by Udacity
@@ -32,6 +33,22 @@ Then you will be connected through ssh to the virtual machine.
 
 Remind that the project files must be placed inside the folder *vagrant* in order
 to be accessible from the virtual machine.
+
+## How to import the database content
+
+[This section was extracted from Udacity]
+
+To load the data, cd into the vagrant directory and use the command 
+```bash
+psql -d news -f newsdata.sql.
+```
+Here's what this command does:
+
+* psql — the PostgreSQL command line program
+* d news — connect to the database named news which has been set up for you
+* f newsdata.sql — run the SQL statements in the file newsdata.sql
+
+Running this command will connect to your installed database server and execute the SQL commands in the downloaded file, creating tables and populating them with data. 
 
 ## How to run this project
 
