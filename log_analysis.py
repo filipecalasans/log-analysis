@@ -12,18 +12,22 @@ DB_NAME = "news"
 DB_CONNECTION_STRING = "dbname={}".format(DB_NAME)
 
 db = psycopg2.connect(DB_CONNECTION_STRING)
+if db is None:
+    print("Could not connect to the Database")
+    exit(1)
 
 
 def cursorFactory():
     return db.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
 
-# What are the most popular three articles of all time?
-# Princess Shellfish Marries Prince Handsome" — 1201 views
-#
-# return [{tile = "Article title", views = 12345}, ...]
-#
 def most_popular_articles_all_time():
+    """
+
+    answares: What are the most popular three articles of all time?
+
+    return [{tile = "Article title", views = 12345}, ...]
+    """
 
     popular_query = (
         "SELECT {view}.id, COUNT(*) as views "
@@ -47,11 +51,13 @@ def most_popular_articles_all_time():
     return result
 
 
-# Who are the most popular article authors of all time?
-#
-# return [{name = "Author Name", views = 12345}, ...]
-#
 def most_popular_author_of_all_time():
+    """
+
+    answares: Who are the most popular article authors of all time?
+
+    return [{name = "Author Name", views = 12345}, ...]
+    """
 
     # Get the most popular article
     subq = (
@@ -76,13 +82,15 @@ def most_popular_author_of_all_time():
     return result
 
 
-# On which days did more than 1% of requests lead to errors?
-#
-# July 29, 2016 — 2.5% errors
-#
-# return [{month = 2, day = 20, year = 2019,
-#          date date(2019, 2, 20), total = 100, error = 1}, ...]
 def days_with_more_than_1_pct_errors():
+    """
+
+    On which days did more than 1% of requests lead to errors?
+
+    return [{month = 2, day = 20, year = 2019,
+            date date(2019, 2, 20), total = 100, error = 1}, ...]
+    """
+
     total_request = (
         "SELECT date_trunc('day', log.time) as day, COUNT(*) as total "
         "FROM log GROUP BY date_trunc('day', log.time)"
