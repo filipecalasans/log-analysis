@@ -13,7 +13,7 @@ This project implements a python script that answers the following questions reg
 
 ## Instructions. How to run this project
 
-Under the psql command line utility create the following view:
+create the following view under the psql command line utility:
 
 
 ```sql
@@ -29,9 +29,20 @@ vagrant@vagrant:/vagrant/logreport$ chamod +x log_analysis.py
 vagrant@vagrant:/vagrant/logreport$ ./log_analysis.py
 ```
 
+The scripts can optionaly take up to two positional arguments, as follow:
+
+```
+log_analysis.py [MAX-AUTHOR-LIST-SIZE] [MAX-ARTICLES-LIST-SIZE]
+```
+
+where,
+
+* MAX-AUTHOR-LIST-SIZE is the number of records returned in the Question 2; Default is 3.
+* MAX-ARTICLES-LIST-SIZE is the number of records returned in the Question 1; Default is 3.
+
 ## Data Schema
 
-We present in this section the data schema and some information we could infer from the dataset provided.
+I present in this section the data schema and some information I was able to infer from the dataset provided.
 
 ### Tables
 
@@ -86,13 +97,13 @@ We present in this section the data schema and some information we could infer f
 ### Relationship between tables
 
 #### Authors x Articles 
-Articles has a foreign key to Author, hence there is a 1-to-many relashionship between them.
+The table Articles has foreign key to Author without restrictions, hence there is a 1-to-many relashionship between them.
   
 #### Log x Articles
-Articles are accessiable under the following *path* syntax: **/article/\<*article-slug*\>**. Since, *slug* uniquely identify an article, we can safely establish a direct relationship between the tables *Log* and *Articles*.
+Articles are accessiable under the following *path* syntax: **/article/\<*article-slug*\>**. Since *slug* uniquely identify an article, we can safely establish a direct relationship between the tables *Log* and *Articles* using the field path in the table log.
 
 #### Log x Authors
-There is no direct relationship between the two tables, therefore we need to establish the relationship through articles.
+There is no direct relationship between the two tables, therefore we need to establish the relationship through the table *Articles*.
 
 ### Views
 
@@ -103,5 +114,7 @@ We utilized the following view in this project:
 create view article_paths as select id, title, author, '/article/' || slug as path from articles;
 
 ```
+
+This view builds the article's path using the field slug. It can be used to match logs and articles.
 
 
