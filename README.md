@@ -1,6 +1,7 @@
 # Project: Logs Analysis
 
-This project implements a python script that answers the following questions regarding the data stored in PostgreSQL.
+This project implements a python script that answers the following questions 
+regarding the data stored in PostgreSQL.
 
 * What are the most popular three articles of all time?
 * Who are the most popular article authors of all time?
@@ -8,30 +9,54 @@ This project implements a python script that answers the following questions reg
 
 ## Dependencies
 
+* [Vagrant](https://www.vagrantup.com/downloads.html)
+* [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
+* [Vagrant file as provided by Udacity](https://github.com/udacity/fullstack-nanodegree-vm/blob/master/vagrant/Vagrantfile)
 * Python 3
-* psycopg2-binary
+* PostgreSQL
+* Data Base news as provided by Udacity
+* psycopg2 library
 
-## Instructions. How to run this project
+## How to setup the vagrant VM
+
+You should be able to spawn a new virtual
+machine executing the following command from inside the directory
+you placed the Vagrant repository provided by Udacity.
+
+```bash
+vagrant up
+vagrant ssh
+```
+
+Then you will be connected through ssh to the virtual machine.
+
+Remind that the project files must be placed inside the folder *vagrant* in order
+to be accessible from the virtual machine.
+
+## How to run this project
+
+Execute the following steps inside the vagrant vm provided.
 
 create the following view under the psql command line utility:
 
 
 ```sql
 
-create view article_paths as select id, title, author, '/article/' || slug as path from articles;
+create view article_paths as select id, title, 
+author, '/article/' || slug as path from articles;
 
 ```
 
-In the commnad line execute:
+Execute the following commnad in the directory where you extracted the files:
 
 ```console
 vagrant@vagrant:/vagrant/logreport$ chamod +x log_analysis.py
 vagrant@vagrant:/vagrant/logreport$ ./log_analysis.py
 ```
 
-The scripts can optionaly take up to two positional arguments, as follow:
+The script can optionally take up to two positional arguments, as follow:
 
-```
+```bash
 log_analysis.py [MAX-AUTHOR-LIST-SIZE] [MAX-ARTICLES-LIST-SIZE]
 ```
 

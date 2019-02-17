@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 import sys
 import psycopg2
@@ -66,7 +66,8 @@ def most_popular_author_of_all_time():
     query = (
         "WITH popular_author as ({subquery})"
         "SELECT name, views FROM authors JOIN popular_author "
-        "ON authorId = authors.id;".format(subquery=subq)
+        "ON authorId = authors.id "
+        "ORDER BY views DESC;".format(subquery=subq)
     )
 
     cursor = cursorFactory()
@@ -109,9 +110,10 @@ def days_with_more_than_1_pct_errors():
         "EXTRACT(MONTH FROM date(total_requests.day)) as month, "
         "EXTRACT(DAY FROM date(total_requests.day)) as day, "
         "EXTRACT(YEAR FROM date(total_requests.day)) as year, "
-        "date(total_requests.day) as date, "
+        "to_char(date(total_requests.day),'FMMonth DD, YYYY') as date, "
         "total, "
-        "error "
+        "error, "
+        "ROUND((100.0*error)/total, 2) as error_pct "
         "FROM total_requests JOIN errors ON "
         "total_requests.day = errors.day "
         "WHERE (100*error) > total;".format(total_requests=total_request,
@@ -144,22 +146,12 @@ def view_popular_author_all_times(data):
 
 def view_more_1_pct_error(data):
 
-    month_list = ['January', 'February', 'March',
-                  'April', 'May', 'June', 'July',
-                  'August', 'September', 'October',
-                  'November', 'December']
-
     str = ""
     for record in data:
-        errors = float(record['error'])
-        total = float(record['total'])
-        error_pct = float(format((100.0 * errors)/total, '.1f'))
-        month_num = int(record['month'])
+        error_pct = record['error_pct']
         str += (
-            "   {month} {day}, {year} - {pct}% errors\n"
-        ).format(month=month_list[month_num-1],
-                 day=int(record['day']),
-                 year=int(record['year']),
+            "   {date} - {pct}% errors\n"
+        ).format(date=record['date'],
                  pct=error_pct)
     return str
 
